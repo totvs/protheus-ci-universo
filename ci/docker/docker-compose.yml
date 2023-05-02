@@ -14,7 +14,7 @@ services:
  dbaccess-postgres:
   image: "docker.totvs.io/universo/dbaccess-postgres"
   volumes:
-  - "./protheus/dbaccess.ini:/opt/totvs/dbaccess/multi/dbaccess.ini"
+  - "../../protheus/dbaccess.ini:/opt/totvs/dbaccess/multi/dbaccess.ini"
   command:
   - "./dbaccess64"
   ports:
@@ -23,9 +23,9 @@ services:
  appserver:
   image: "docker.totvs.io/universo/appserver"
   volumes:
-  - "./protheus/systemload/:/opt/totvs/protheus/protheus_data/systemload/"
-  - "./protheus/appserver.ini:/opt/totvs/appserver/appserver.ini"
-  - "./protheus/apo/:/opt/totvs/protheus/apo/"
+  - "../../protheus/systemload/:/opt/totvs/protheus/protheus_data/systemload/"
+  - "../../protheus/appserver.ini:/opt/totvs/appserver/appserver.ini"
+  - "../../protheus/apo/:/opt/totvs/protheus/apo/"
   command:
   - "./appsrvlinux"
   ports:

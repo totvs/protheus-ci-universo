@@ -1,16 +1,14 @@
 #!/bin/bash
 set -e
 
-# cd ..
-
 echo "=== Code Analysis ==="
-bash scripts/analysis.sh
+bash ci/scripts/analysis.sh
 
 echo "=== Build ==="
-bash scripts/build.sh
+bash ci/scripts/build.sh
 
 echo "=== Apply ==="
-bash scripts/apply.sh
+bash ci/scripts/apply.sh
 
 echo "=== Test ==="
-bash scripts/test.sh
+bash ci/scripts/test.sh
