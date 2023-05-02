@@ -6,7 +6,7 @@ Para baixá-lo, faça um clone deste repositório em seu ambiente local: `git cl
 
 ## Ambiente Protheus local de exemplo
 
-Se deseja subir um ambiente Protheus local via Docker para execução do TIR nesta pipeline, rodar o seguinte script: `bash protheus-ci-universo/up_env.sh`.
+Se deseja subir um ambiente Protheus local via Docker para execução do TIR nesta pipeline, rodar o seguinte script: `cd protheus-ci-universo && bash ci/docker/up_env.sh`.
 
 ## Execução da pipeline de exemplo
 
@@ -16,7 +16,7 @@ Obs.: Caso queira utilizar o ambiente deste exemplo, execute o script do tópico
 
 1. Adicione na [pasta](#estrutura) Protheus os includes, o rpo default e o dicionário (os 2 últimos apenas se utilizar o ambiente Protheus  local de exemplo);
 2. Caso queira utilizar outro ambiente de sua escolha, configure-o nas configs do TIR;
-3. Execute o seguinte script: `bash protheus-ci-universo/ci/execute.sh` para execução da pipeline.
+3. Execute o seguinte script: `cd protheus-ci-universo && bash ci/scripts/execute.sh` para execução da pipeline.
 
 ## CI Scripts
 
