@@ -1,0 +1,11 @@
+{
+    "Url": "http://localhost:8080",
+    "Browser": "Firefox",
+    "Environment": "ENVIRONMENT",
+    "Language": "pt-br",
+    "User": "admin",
+    "Password": "",
+    "DebugLog": false,
+    "TimeOut": 90,
+    "Headless": true
+}

@@ -1,0 +1,33 @@
+version: "3.6"
+
+services:
+ license:
+  image: "docker.totvs.io/universo/license"
+  ports:
+  - "8020:8020"
+
+ postgres-iniciado:
+  image: "docker.totvs.io/universo/postgres-iniciado:12.1.2210_bra"
+  ports:
+  - "5432:5432"
+
+ dbaccess-postgres:
+  image: "docker.totvs.io/universo/dbaccess-postgres"
+  volumes:
+  - "./protheus/dbaccess.ini:/opt/totvs/dbaccess/multi/dbaccess.ini"
+  command:
+  - "./dbaccess64"
+  ports:
+  - "7890:7890"
+
+ appserver:
+  image: "docker.totvs.io/universo/appserver"
+  volumes:
+  - "./protheus/systemload/:/opt/totvs/protheus/protheus_data/systemload/"
+  - "./protheus/appserver.ini:/opt/totvs/appserver/appserver.ini"
+  - "./protheus/apo/:/opt/totvs/protheus/apo/"
+  command:
+  - "./appsrvlinux"
+  ports:
+  - "1234:1234"
+  - "8080:8080"
