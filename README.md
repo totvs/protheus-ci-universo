@@ -11,9 +11,9 @@ Rodar o seguinte script: `bash ./up_env.sh`
 1. Tenha um ambiente Protheus funcional (caso queira utilizar o deste exemplo, execute o script do tópico anterior);
 2. Adicione na [pasta](#pastas) Protheus os includes, o rpo default e o dicionário (os 2 últimos apenas se utilizar o ambiente Protheus  local de exemplo);
 3. Caso queira utilizar outro ambiente de sua escolha, configure-o nas configs do TIR;
-4. Execute o seguinte script: `bash scripts/execute.sh` para execução da pipeline.
+4. Execute o seguinte script: `bash ci/execute.sh` para execução da pipeline.
 
-## Scripts
+## Scripts CI
 
 Em ordem de execução.
 
@@ -34,7 +34,7 @@ Obs.: Caso um dos scripts retorne erro, a pipeline irá "quebrar", não continua
 │    ├── apo        (volume dos RPOs do ambiente Protheus)
 │    ├── includes   (volume dos includes da compilação)
 │    └── systemload (volume dos arquivos de dicionários)
-├── scripts         (scripts da pipeline)
+├── ci              (scripts da pipeline)
 ├── src             (códigos-fonte da pipeline)
 └── tir             (scripts e configurações para execução do TIR)
 ```
