@@ -12,3 +12,6 @@ bash ci/scripts/apply.sh
 
 echo "=== Test ==="
 bash ci/scripts/test.sh
+
+
+echo "Pipeline completed"

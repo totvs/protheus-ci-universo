@@ -1,4 +1,4 @@
 #!/bin/bash
 set -e
 
-docker service update --force protheus_appserver
+# Script customizado para aplicar as alterações no ambiente desejado (se necessário)

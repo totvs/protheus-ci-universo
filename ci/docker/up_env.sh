@@ -1,4 +1,6 @@
 #!/bin/bash
 set -e
 
-docker stack up -c ci/docker/docker-compose.yml protheus
+docker compose -f ci/docker/docker-compose.yml -p protheus up -d
+
+echo "Protheus Started"
