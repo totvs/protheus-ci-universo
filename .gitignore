@@ -1,5 +1,3 @@
 output
 *.rpo
-protheus/includes
-protheus/systemload
 __pycache__
