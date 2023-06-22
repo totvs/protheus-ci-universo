@@ -2,9 +2,7 @@
     "breakList": [],
     "breakOnError": true,
     "ignoreList": [
-	"CA1004"
     ],
     "printSonarFullOutput": false,
     "printInternalWarnings": false
 }
-
