@@ -1,3 +1,8 @@
 output
 *.rpo
+*.RPO
+*.ch
+*.CH
+*.unq
+*.txt
 __pycache__
