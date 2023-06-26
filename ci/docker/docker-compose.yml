@@ -2,17 +2,17 @@ version: "3.6"
 
 services:
  license:
-  image: "docker.totvs.io/universo/license"
+  image: "totvsengpro/license-dev"
   ports:
   - "8020:8020"
 
  postgres-iniciado:
-  image: "docker.totvs.io/universo/postgres-iniciado:12.1.2210_bra"
+  image: "totvsengpro/postgres-dev"
   ports:
   - "5432:5432"
 
  dbaccess-postgres:
-  image: "docker.totvs.io/universo/dbaccess-postgres"
+  image: "totvsengpro/dbaccess-postgres-dev"
   volumes:
   - "../../protheus/dbaccess.ini:/opt/totvs/dbaccess/multi/dbaccess.ini"
   command:
@@ -21,7 +21,7 @@ services:
   - "7890:7890"
 
  appserver:
-  image: "docker.totvs.io/universo/appserver"
+  image: "totvsengpro/appserver-dev"
   volumes:
   - "../../protheus/systemload/:/opt/totvs/protheus/protheus_data/systemload/"
   - "../../protheus/appserver.ini:/opt/totvs/appserver/appserver.ini"

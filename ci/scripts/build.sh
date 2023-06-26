@@ -24,5 +24,5 @@ docker run --rm -it \
 -v ${PWD}/protheus/includes:/tmp/includes \
 -v ${PWD}/protheus/appserver.ini:/opt/totvs/appserver/appserver.ini \
 -v ${PWD}/protheus/apo/:/opt/totvs/protheus/apo/ \
-docker.totvs.io/universo/appserver:latest \
+totvsengpro/appserver-dev \
 ./appsrvlinux -compile -env=environment -files=/tmp/compile -includes=/tmp/includes
