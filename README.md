@@ -53,10 +53,11 @@ Este projeto contém a seguinte estrutura de pastas e seus respectivos propósit
 
 ## Documentações relacionadas
 
+- [Code Analysis via Docker](https://hub.docker.com/r/totvsengpro/advpl-tlpp-code-analyzer)
+- [Protheus via Docker](https://docker-Protheus.engpro.totvs.com.br)
+- [AppServer command line](https://tdn.totvs.com/pages/viewpage.action?pageId=6064914)
+- [Sonar Rules](https://sonar-rules.engpro.totvs.com.br/menu/rules)
 - [Git](https://git-scm.com)
 - [Docker](https://docs.docker.com)
 - [CodeAnalysis](https://codeanalysis.totvs.com.br)
-- [Sonar Rules](https://sonar-rules.engpro.totvs.com.br/menu/rules)
 - [TIR](https://github.com/totvs/tir)
-- [Protheus via Docker](https://docker-Protheus.engpro.totvs.com.br)
-- [Code Analysis via Docker](https://hub.docker.com/r/totvsengpro/advpl-tlpp-code-analyzer)
