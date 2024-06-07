@@ -7,7 +7,7 @@ services:
   - "8020:8020"
 
  postgres-iniciado:
-  image: "docker.totvs.io/universo/postgres-iniciado"
+  image: "docker.totvs.io/universo/postgres-iniciado:12.1.2310_bra"
   ports:
   - "5432:5432"
 
