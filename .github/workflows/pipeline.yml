@@ -42,7 +42,7 @@ jobs:
             -v ${{ github.workspace }}/protheus/includes:/tmp/includes \
             -v ${{ github.workspace }}/protheus/appserver.ini:/opt/totvs/appserver/appserver.ini \
             -v ${{ github.workspace }}/protheus/apo/:/opt/totvs/protheus/apo/ \
-            totvsengpro/appserver-dev \
+            docker.totvs.io/universo/appserver:latest \
             ./appsrvlinux -compile -env=environment -files=/tmp/compile -includes=/tmp/includes
         - name: 'Upload custom RPO'
           uses: actions/upload-artifact@v3
@@ -90,7 +90,7 @@ jobs:
             -v ${{ github.workspace }}/protheus/includes:/tmp/includes \
             -v ${{ github.workspace }}/protheus/appserver.ini:/opt/totvs/appserver/appserver.ini \
             -v ${{ github.workspace }}/protheus/apo/:/opt/totvs/protheus/apo/ \
-            totvsengpro/appserver-dev \
+            docker.totvs.io/universo/appserver:latest \
             ./appsrvlinux -compile -genpatch -env=environment -files=/tmp/compile/sources.lst -includes=/tmp/includes -outgenpatch=/tmp/compile -patchtype=ptm
         - name: 'Upload patch'
           uses: actions/upload-artifact@v3
