@@ -11,7 +11,7 @@ class CRMA980(unittest.TestCase):
 
 	def test_CRMA980_CT133(self):
 
-		cliente = 'FTC143'
+		cliente = 'FTC144'
 		loja = '01'
 
 		self.oHelper.SetButton('Incluir')
