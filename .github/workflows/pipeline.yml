@@ -28,7 +28,7 @@ jobs:
             ref: master
         - name: list
           run: |
-            ls -lah /artefatos
+            ls -lah ${{ github.workspace }}/artefatos
         - name: docker
           run: |
             docker run --rm alpine echo foi
