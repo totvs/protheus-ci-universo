@@ -27,7 +27,9 @@ jobs:
             path: artefatos
             ref: master
         - name: limits
-          run: sudo sysctl -w fs.file-max=32768
+          run: |
+            sudo sysctl -w fs.file-max=32768
+            sysctl fs.file-max
         - name: list
           run: |
             ls -lah ${{ github.workspace }}/artefatos
