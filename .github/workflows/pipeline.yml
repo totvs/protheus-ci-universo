@@ -26,6 +26,8 @@ jobs:
             token: ${{ secrets.GH_ARTE_SECRET }} # `GH_PAT` is a secret that contains your PAT
             path: artefatos
             ref: master
+        - name: limits
+          run: sudo sysctl -w fs.file-max=32768
         - name: list
           run: |
             ls -lah ${{ github.workspace }}/artefatos
