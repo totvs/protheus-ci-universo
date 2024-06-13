@@ -36,6 +36,7 @@ jobs:
 
         - name: Clone the repository with SSH
           run: git clone git@code.engpro.totvs.com.br:engpro/protheus-ci-universo-artefatos.git
+          working-directory: artefatos
 
         - name: limits
           run: |
@@ -43,6 +44,7 @@ jobs:
             sysctl fs.file-max
         - name: list
           run: |
+            ls -lah ${{ github.workspace }}
             ls -lah ${{ github.workspace }}/artefatos
         - name: docker
           run: |
