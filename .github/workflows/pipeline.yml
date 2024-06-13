@@ -33,11 +33,9 @@ jobs:
             echo "${{ secrets.GITEA_SSH }}" > ~/.ssh/id_ed25519
             chmod 600 ~/.ssh/id_ed25519
             ssh-keyscan code.engpro.totvs.com.br >> ~/.ssh/known_hosts
-            mkdir ${{ github.workspace }}/artefatos
 
         - name: Clone the repository with SSH
-          run: git clone git@code.engpro.totvs.com.br:engpro/protheus-ci-universo-artefatos.git
-          working-directory: artefatos
+          run: git clone git@code.engpro.totvs.com.br:engpro/protheus-ci-universo-artefatos.git artefatos
 
         - name: limits
           run: |
