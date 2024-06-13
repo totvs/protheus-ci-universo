@@ -37,14 +37,15 @@ jobs:
         - name: Clone the repository with SSH
           run: git clone git@code.engpro.totvs.com.br:engpro/protheus-ci-universo-artefatos.git artefatos
 
-        - name: limits
-          run: |
-            sudo sysctl -w fs.file-max=32768
-            sysctl fs.file-max
+        # - name: limits
+        #   run: |
+        #     sudo sysctl -w fs.file-max=32768
+        #     sysctl fs.file-max
         - name: list
           run: |
             ls -lah ${{ github.workspace }}
-            ls -lah ${{ github.workspace }}/artefatos
+            ls -lah ${{ github.workspace }}/artefatos/
+            ls -lah ${{ github.workspace }}/artefatos/apo
         - name: docker
           run: |
             docker run --rm alpine echo foi
