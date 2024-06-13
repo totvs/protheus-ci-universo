@@ -19,14 +19,24 @@ jobs:
       steps:
         - name: Checkout repository
           uses: actions/checkout@v3
-        - name: Checkout private tools
-          uses: actions/checkout@v4
-          with:
-            repository: engpro/protheus-ci-universo-artefatos
-            ssh-key: ${{ secrets.GITEA_SSH }} # `GH_PAT` is a secret that contains your PAT
-            path: artefatos
-            ref: master
-            github-server-url: "https://code.engpro.totvs.com.br"
+        # - name: Checkout private tools
+        #   uses: actions/checkout@v4
+        #   with:
+        #     repository: engpro/protheus-ci-universo-artefatos
+        #     ssh-key: ${{ secrets.GITEA_SSH }} # `GH_PAT` is a secret that contains your PAT
+        #     path: artefatos
+        #     ref: master
+        #     github-server-url: "https://code.engpro.totvs.com.br"
+        - name: Set up SSH
+          run: |
+            mkdir -p ~/.ssh
+            echo "${{ secrets.GITEA_SSH }}" > ~/.ssh/id_ed25519
+            chmod 600 ~/.ssh/id_ed25519
+            ssh-keyscan code.engpro.totvs.com.br >> ~/.ssh/known_hosts
+
+        - name: Clone the repository with SSH
+          run: git clone git@code.engpro.totvs.com.br:engpro/protheus-ci-universo-artefatos.git
+
         - name: limits
           run: |
             sudo sysctl -w fs.file-max=32768
