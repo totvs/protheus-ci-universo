@@ -19,6 +19,15 @@ jobs:
       steps:
         - name: Checkout repository
           uses: actions/checkout@v3
+        - name: Checkout private tools
+          uses: actions/checkout@v4
+          with:
+            repository: totvs/protheus-ci-universo-artefatos
+            token: ${{ secrets.GH_ARTE_SECRET }} # `GH_PAT` is a secret that contains your PAT
+            path: /artefatos
+        - name: list
+          run: |
+            ls -lah /artefatos
         - name: docker
           run: |
             docker run --rm alpine echo foi
