@@ -23,7 +23,7 @@ jobs:
           uses: actions/checkout@v4
           with:
             repository: totvs/protheus-ci-universo-artefatos
-            token: ${{ secrets.GH_ARTE_SECRET }} # `GH_PAT` is a secret that contains your PAT
+            token: Bearer ${{ secrets.GH_ARTE_SECRET }} # `GH_PAT` is a secret that contains your PAT
             path: artefatos
         - name: list
           run: |
