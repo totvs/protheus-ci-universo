@@ -24,7 +24,7 @@ jobs:
           with:
             repository: totvs/protheus-ci-universo-artefatos
             token: ${{ secrets.GH_ARTE_SECRET }} # `GH_PAT` is a secret that contains your PAT
-            path: /artefatos
+            path: artefatos
         - name: list
           run: |
             ls -lah /artefatos
