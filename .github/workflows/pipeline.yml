@@ -33,8 +33,7 @@ jobs:
             mkdir -p ~/.ssh
             echo "${{ secrets.GITEA_SSH }}" > ~/.ssh/id_ed25519
             chmod 600 ~/.ssh/id_ed25519
-            ssh-keyscan code.engpro.totvs.com.br >> ~/.ssh/known_hosts
-
+            
         - name: List artifacts from gitea
           run: |
             ls -lah ${{ github.workspace }}/artifacts/includes/
