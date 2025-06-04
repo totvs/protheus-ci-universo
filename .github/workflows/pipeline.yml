@@ -30,7 +30,7 @@ jobs:
 
         - name: Download and unzip private artifacts
           run: |
-            curl -o universo.zip "${{ env.PRESIGNED_URL }}"
+            curl -o universo.zip "${{ secrets.PRESIGNED_URL }}"
             unzip universo.zip -d artifacts/
 
         - name: List artifacts from gitea
@@ -76,7 +76,7 @@ jobs:
 
         - name: Download and unzip private artifacts
           run: |
-            curl -o universo.zip "${{ env.PRESIGNED_URL }}"
+            curl -o universo.zip "${{ secrets.PRESIGNED_URL }}"
             unzip universo.zip -d artifacts/
 
         - name: List artifacts from gitea
