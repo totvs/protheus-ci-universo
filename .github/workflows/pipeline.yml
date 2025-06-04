@@ -30,13 +30,10 @@ jobs:
 
         - name: Checkout private artifacts
           run: |
-            set -euxo pipefail
             mkdir -p ~/.ssh
             echo "${{ secrets.GITEA_SSH }}" > ~/.ssh/id_ed25519
             chmod 600 ~/.ssh/id_ed25519
             ssh-keyscan code.engpro.totvs.com.br >> ~/.ssh/known_hosts
-            ssh -i ~/.ssh/id_ed25519 git@code.engpro.totvs.com.br
-            git clone git@code.engpro.totvs.com.br:engpro/protheus-ci-universo-artefatos.git artifacts
 
         - name: List artifacts from gitea
           run: |
