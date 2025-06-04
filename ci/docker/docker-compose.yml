@@ -12,7 +12,7 @@ services:
   - "5432:5432"
 
  dbaccess-postgres:
-  image: "totvsengpro/dbaccess-postgres-dev"
+  image: "totvsengpro/dbaccess-postgres-dev:23.1.1.4"
   volumes:
   - "../../protheus/dbaccess.ini:/opt/totvs/dbaccess/multi/dbaccess.ini"
   command:
@@ -21,7 +21,7 @@ services:
   - "7890:7890"
 
  appserver:
-  image: "totvsengpro/appserver-dev"
+  image: "totvsengpro/appserver-dev:20.3.2.8"
   volumes:
   - "../../protheus/appserver.ini:/opt/totvs/appserver/appserver.ini"
   - "../../protheus/systemload/:/opt/totvs/protheus/protheus_data/systemload/"
