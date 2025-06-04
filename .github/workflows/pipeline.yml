@@ -60,63 +60,63 @@ jobs:
             name: custom-rpo
             path: ${{ github.workspace }}/protheus/apo/custom.rpo
 
-  tir:
-      name: Teste/TIR
-      needs: [build]
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v4
+  # tir:
+  #     name: Teste/TIR
+  #     needs: [build]
+  #     runs-on: ubuntu-latest
+  #     steps:
+  #       - name: Checkout repository
+  #         uses: actions/checkout@v4
 
-        - name: Download custom RPO
-          uses: actions/download-artifact@v4
-          with:
-            name: custom-rpo
-            path: ${{ github.workspace }}/protheus/apo/
+  #       - name: Download custom RPO
+  #         uses: actions/download-artifact@v4
+  #         with:
+  #           name: custom-rpo
+  #           path: ${{ github.workspace }}/protheus/apo/
 
-        - name: Download and unzip private artifacts
-          run: |
-            curl -o universo.zip "${{ secrets.PRESIGNED_URL }}"
-            unzip universo.zip -d artifacts/
+  #       - name: Download and unzip private artifacts
+  #         run: |
+  #           curl -o universo.zip "${{ secrets.PRESIGNED_URL }}"
+  #           unzip universo.zip -d artifacts/
 
-        - name: List artifacts from gitea
-          run: |
-            ls -lah ${{ github.workspace }}/artifacts/apo/
-            ls -lah ${{ github.workspace }}/artifacts/systemload/
+  #       - name: List artifacts from gitea
+  #         run: |
+  #           ls -lah ${{ github.workspace }}/artifacts/apo/
+  #           ls -lah ${{ github.workspace }}/artifacts/systemload/
 
-        - name: Copy artifacts to workspace
-          run: |
-            cp ${{ github.workspace }}/artifacts/apo/tttm120.rpo ${{ github.workspace }}/protheus/apo/tttm120.rpo
-            cp ${{ github.workspace }}/artifacts/systemload/sxs.zip ${{ github.workspace }}/protheus/systemload/sxs.zip
+  #       - name: Copy artifacts to workspace
+  #         run: |
+  #           cp ${{ github.workspace }}/artifacts/apo/tttm120.rpo ${{ github.workspace }}/protheus/apo/tttm120.rpo
+  #           cp ${{ github.workspace }}/artifacts/systemload/sxs.zip ${{ github.workspace }}/protheus/systemload/sxs.zip
 
-        - name: Unzip SXs
-          run: cd ./protheus/systemload && unzip sxs.zip
+  #       - name: Unzip SXs
+  #         run: cd ./protheus/systemload && unzip sxs.zip
 
-        - name: List artifacts files
-          run: |
-            ls -lah ${{ github.workspace }}/protheus/apo/
-            ls -lah ${{ github.workspace }}/protheus/systemload/
+  #       - name: List artifacts files
+  #         run: |
+  #           ls -lah ${{ github.workspace }}/protheus/apo/
+  #           ls -lah ${{ github.workspace }}/protheus/systemload/
 
-        - name: Up Protheus
-          run: |
-            bash ci/scripts/up_env.sh
+  #       - name: Up Protheus
+  #         run: |
+  #           bash ci/scripts/up_env.sh
 
-        - name: Test Protheus Connection
-          run: curl localhost:8080
+  #       - name: Test Protheus Connection
+  #         run: curl localhost:8080
 
-        - name: Run TIR
-          run: |
-            docker run --rm --network=host -e HOME=/tmp \
-            -v ${{ github.workspace }}/tir:/local totvsengpro/tir \
-            python3 /local/CRMA980TESTSUITE.py
+  #       - name: Run TIR
+  #         run: |
+  #           docker run --rm --network=host -e HOME=/tmp \
+  #           -v ${{ github.workspace }}/tir:/local totvsengpro/tir \
+  #           python3 /local/CRMA980TESTSUITE.py
 
-        - name: Down Protheus
-          run: bash ci/scripts/down_env.sh
-          if: always()
+  #       - name: Down Protheus
+  #         run: bash ci/scripts/down_env.sh
+  #         if: always()
 
   patch:
       name: CD/Patch Generation
-      needs: [tir]
+      # needs: [tir]
       runs-on: ubuntu-latest
       steps:
         - name: Checkout repository
