@@ -28,12 +28,11 @@ jobs:
         - name: Checkout repository
           uses: actions/checkout@v4
 
-        - name: Checkout private artifacts
+        - name: Download and unzip private artifacts
           run: |
-            mkdir -p ~/.ssh
-            echo "${{ secrets.GITEA_SSH }}" > ~/.ssh/id_ed25519
-            chmod 600 ~/.ssh/id_ed25519
-            
+            curl -o universo.zip "${{ env.PRESIGNED_URL }}"
+            unzip universo.zip -d artifacts/
+
         - name: List artifacts from gitea
           run: |
             ls -lah ${{ github.workspace }}/artifacts/includes/
@@ -75,13 +74,10 @@ jobs:
             name: custom-rpo
             path: ${{ github.workspace }}/protheus/apo/
 
-        - name: Checkout private artifacts
+        - name: Download and unzip private artifacts
           run: |
-            mkdir -p ~/.ssh
-            echo "${{ secrets.GITEA_SSH }}" > ~/.ssh/id_ed25519
-            chmod 600 ~/.ssh/id_ed25519
-            ssh-keyscan code.engpro.totvs.com.br >> ~/.ssh/known_hosts
-            git clone git@code.engpro.totvs.com.br:engpro/protheus-ci-universo-artefatos.git artifacts
+            curl -o universo.zip "${{ env.PRESIGNED_URL }}"
+            unzip universo.zip -d artifacts/
 
         - name: List artifacts from gitea
           run: |
