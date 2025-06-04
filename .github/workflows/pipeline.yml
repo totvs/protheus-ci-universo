@@ -116,7 +116,7 @@ jobs:
 
   patch:
       name: CD/Patch Generation
-      # needs: [tir]
+      needs: [build]
       runs-on: ubuntu-latest
       steps:
         - name: Checkout repository
