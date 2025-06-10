@@ -130,7 +130,7 @@ jobs:
             mkdir log
             docker run --rm --network=host -e HOME=/tmp \
             -v ${{ github.workspace }}/log/:/tmp/Log/ \
-            -v ${{ github.workspace }}/tir:/local totvsengpro/tir \
+            -v ${{ github.workspace }}/tir:/local totvsengpro/tir:2.0.1 \
             python3 /local/CRMA980TESTSUITE.py
 # docker run --rm --network=host -e HOME=/tmp -v ${PWD}/tir:/local totvsengpro/tir python3 /local/CRMA980TESTSUITE.py
         - name: Zip TIR Logs
