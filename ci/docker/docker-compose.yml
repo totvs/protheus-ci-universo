@@ -2,17 +2,17 @@
 
 services:
  license:
-  image: "totvsengpro/license-dev"
+  image: "totvsengpro/license-dev:3.6.3"
   ports:
   - "8020:8020"
 
  postgres-iniciado:
-  image: "totvsengpro/postgres-dev:12.1.2310_bra"
+  image: "totvsengpro/postgres-dev:12.1.2410_bra"
   ports:
   - "5432:5432"
 
  dbaccess-postgres:
-  image: "totvsengpro/dbaccess-postgres-dev:23.1.1.4"
+  image: "totvsengpro/dbaccess-postgres-dev:24.1.0.2"
   volumes:
   - "../../protheus/dbaccess.ini:/opt/totvs/dbaccess/multi/dbaccess.ini"
   command:
@@ -21,7 +21,7 @@ services:
   - "7890:7890"
 
  appserver:
-  image: "totvsengpro/appserver-dev:20.3.2.8"
+  image: "totvsengpro/appserver-dev:24.3.0.5"
   volumes:
   - "../../protheus/appserver.ini:/opt/totvs/appserver/appserver.ini"
   - "../../protheus/systemload/:/opt/totvs/protheus/protheus_data/systemload/"

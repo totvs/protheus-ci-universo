@@ -7,5 +7,7 @@
     "Password": "",
     "DebugLog": true,
     "TimeOut": 90,
-    "Headless": true
+    "Headless": true,
+    "ScreenshotFolder": "/tmp/Log",
+    "LogFolder": "/tmp/Log"
 }

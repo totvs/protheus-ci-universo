@@ -2,7 +2,9 @@
 *.RPO
 *.ch
 *.CH
+*.th
 *.unq
 *.txt
 *.zip
 __pycache__
+license

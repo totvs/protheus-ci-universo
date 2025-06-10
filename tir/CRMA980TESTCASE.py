@@ -1,5 +1,6 @@
 from tir import Webapp
 import unittest
+import time
 
 class CRMA980(unittest.TestCase):
 
@@ -30,8 +31,12 @@ class CRMA980(unittest.TestCase):
 		self.oHelper.SetValue('A1_MUN','SAO PAULO')
 		self.oHelper.SetButton('Confirmar')
 		# self.oHelper.SetButton('Não')
+
+		self.oHelper.WaitShow("Entrou no PE - Operacao de Inclusao")
+
 		self.oHelper.SetButton('Fechar') # Mensagem do PE
-		self.oHelper.SetButton('Fechar')
+
+		self.oHelper.SetButton('Fechar') # Mensagem padrão de inclusão
 
 		self.oHelper.SearchBrowse(f'{cliente+loja}', 'Codigo + Loja')
 

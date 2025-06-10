@@ -1,10 +1,15 @@
 name: CI
 on:
   push:
-    branches: [ "2024" ]
+    branches: [ "2025" ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+
+env:
+  PATCH_NAME: patch-branch-${{ github.ref_name }}.ptm
+
 jobs:
+
   analysis:
       name: Code Analysis/Inspeção
       runs-on: ubuntu-latest
@@ -28,12 +33,20 @@ jobs:
         - name: Checkout repository
           uses: actions/checkout@v4
 
+        - name: Configurar credenciais AWS
+          uses: aws-actions/configure-aws-credentials@v4
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: 'us-east-2'
+
         - name: Download and unzip private artifacts
           run: |
-            curl -o universo.zip "${{ secrets.PRESIGNED_URL }}"
-            unzip universo.zip -d artifacts/
+            aws s3 cp s3://${{ secrets.S3_BUCKET }}/universo-2025.zip artefatos.zip
+            unzip artefatos.zip -d artifacts/
+            ls -la artifacts/
 
-        - name: List artifacts from gitea
+        - name: List artifacts from AWS
           run: |
             ls -lah ${{ github.workspace }}/artifacts/includes/
 
@@ -51,7 +64,7 @@ jobs:
             -v ${{ github.workspace }}/protheus/includes:/tmp/includes \
             -v ${{ github.workspace }}/protheus/appserver.ini:/opt/totvs/appserver/appserver.ini \
             -v ${{ github.workspace }}/protheus/apo/:/opt/totvs/protheus/apo/ \
-            totvsengpro/appserver-dev:20.3.2.8 \
+            totvsengpro/appserver-dev:24.3.0.5 \
             ./appsrvlinux -compile -env=environment -files=/tmp/compile -includes=/tmp/includes
 
         - name: 'Upload custom RPO'
@@ -60,67 +73,95 @@ jobs:
             name: custom-rpo
             path: ${{ github.workspace }}/protheus/apo/custom.rpo
 
-  # tir:
-  #     name: Teste/TIR
-  #     needs: [build]
-  #     runs-on: ubuntu-latest
-  #     steps:
-  #       - name: Checkout repository
-  #         uses: actions/checkout@v4
-
-  #       - name: Download custom RPO
-  #         uses: actions/download-artifact@v4
-  #         with:
-  #           name: custom-rpo
-  #           path: ${{ github.workspace }}/protheus/apo/
-
-  #       - name: Download and unzip private artifacts
-  #         run: |
-  #           curl -o universo.zip "${{ secrets.PRESIGNED_URL }}"
-  #           unzip universo.zip -d artifacts/
-
-  #       - name: List artifacts from gitea
-  #         run: |
-  #           ls -lah ${{ github.workspace }}/artifacts/apo/
-  #           ls -lah ${{ github.workspace }}/artifacts/systemload/
-
-  #       - name: Copy artifacts to workspace
-  #         run: |
-  #           cp ${{ github.workspace }}/artifacts/apo/tttm120.rpo ${{ github.workspace }}/protheus/apo/tttm120.rpo
-  #           cp ${{ github.workspace }}/artifacts/systemload/sxs.zip ${{ github.workspace }}/protheus/systemload/sxs.zip
-
-  #       - name: Unzip SXs
-  #         run: cd ./protheus/systemload && unzip sxs.zip
-
-  #       - name: List artifacts files
-  #         run: |
-  #           ls -lah ${{ github.workspace }}/protheus/apo/
-  #           ls -lah ${{ github.workspace }}/protheus/systemload/
-
-  #       - name: Up Protheus
-  #         run: |
-  #           bash ci/scripts/up_env.sh
-
-  #       - name: Test Protheus Connection
-  #         run: curl localhost:8080
-
-  #       - name: Run TIR
-  #         run: |
-  #           docker run --rm --network=host -e HOME=/tmp \
-  #           -v ${{ github.workspace }}/tir:/local totvsengpro/tir \
-  #           python3 /local/CRMA980TESTSUITE.py
-
-  #       - name: Down Protheus
-  #         run: bash ci/scripts/down_env.sh
-  #         if: always()
-
-  patch:
-      name: CD/Patch Generation
+  tir:
+      name: Teste/TIR
       needs: [build]
       runs-on: ubuntu-latest
       steps:
         - name: Checkout repository
           uses: actions/checkout@v4
+
+        - name: Download custom RPO
+          uses: actions/download-artifact@v4
+          with:
+            name: custom-rpo
+            path: ${{ github.workspace }}/protheus/apo/
+
+        - name: Configurar credenciais AWS
+          uses: aws-actions/configure-aws-credentials@v4
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: 'us-east-2'
+
+        - name: Download and unzip private artifacts
+          run: |
+            aws s3 cp s3://${{ secrets.S3_BUCKET }}/universo-2025.zip artefatos.zip
+            unzip artefatos.zip -d artifacts/
+            ls -la artifacts/
+
+        - name: List artifacts from AWS
+          run: |
+            ls -lah ${{ github.workspace }}/artifacts/apo/
+            ls -lah ${{ github.workspace }}/artifacts/systemload/
+
+        - name: Copy artifacts to workspace
+          run: |
+            cp ${{ github.workspace }}/artifacts/apo/tttm120.rpo ${{ github.workspace }}/protheus/apo/tttm120.rpo
+            cp ${{ github.workspace }}/artifacts/systemload/sxs.zip ${{ github.workspace }}/protheus/systemload/sxs.zip
+
+        - name: Unzip SXs
+          run: cd ./protheus/systemload && unzip sxs.zip
+
+        - name: List artifacts files
+          run: |
+            ls -lah ${{ github.workspace }}/protheus/apo/
+            ls -lah ${{ github.workspace }}/protheus/systemload/
+
+        - name: Up Protheus
+          run: |
+            bash ci/scripts/up_env.sh
+
+        - name: Test Protheus Connection
+          run: curl localhost:8080
+
+        - name: Run TIR
+          run: |
+            mkdir log
+            docker run --rm --network=host -e HOME=/tmp \
+            -v ${{ github.workspace }}/log/:/tmp/Log/ \
+            -v ${{ github.workspace }}/tir:/local totvsengpro/tir \
+            python3 /local/CRMA980TESTSUITE.py
+# docker run --rm --network=host -e HOME=/tmp -v ${PWD}/tir:/local totvsengpro/tir python3 /local/CRMA980TESTSUITE.py
+        - name: Zip TIR Logs
+          run: zip -r tir-logs.zip log
+          if: always()
+
+        - name: 'Upload zip tir logs'
+          uses: actions/upload-artifact@v4
+          if: always()
+          with:
+            name: tir-logs.zip
+            path: ${{ github.workspace }}/tir-logs.zip
+
+        - name: Down Protheus
+          run: bash ci/scripts/down_env.sh
+          if: always()
+
+  patch:
+      name: CD/Patch Generation
+      needs: [tir]
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Configure AWS credentials
+          uses: aws-actions/configure-aws-credentials@v4
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: 'us-east-2'
 
         - name: Download custom RPO
           uses: actions/download-artifact@v4
@@ -138,11 +179,53 @@ jobs:
             -v ${{ github.workspace }}/protheus/includes:/tmp/includes \
             -v ${{ github.workspace }}/protheus/appserver.ini:/opt/totvs/appserver/appserver.ini \
             -v ${{ github.workspace }}/protheus/apo/:/opt/totvs/protheus/apo/ \
-            totvsengpro/appserver-dev:20.3.2.8 \
+            totvsengpro/appserver-dev:24.3.0.5 \
             ./appsrvlinux -compile -genpatch -env=environment -files=/tmp/compile/sources.lst -includes=/tmp/includes -outgenpatch=/tmp/compile -patchtype=ptm
 
-        - name: 'Upload patch'
+        - name: Upload patch
           uses: actions/upload-artifact@v4
           with:
             name: custom-ptm
             path: ${{ github.workspace }}/src/custom.ptm
+
+        - name: Upload patch to S3
+          run: |
+            aws s3 cp ${{ github.workspace }}/src/custom.ptm s3://${{ secrets.S3_BUCKET }}/${{ env.PATCH_NAME }}
+
+  deploy:
+    name: CD/Apply Patch on T-Cloud
+    needs: [patch]
+    runs-on: ubuntu-latest
+    environment: Develop
+    steps:
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'us-east-2'
+
+      - name: Get presign URL
+        run: |
+          URL=$(aws s3 presign s3://${{ secrets.S3_BUCKET }}/${{ env.PATCH_NAME }} --expires-in 300)
+          echo "PRESIGN_PATCH_URL=$URL" >> $GITHUB_ENV
+
+      - name: Apply on T-Cloud
+        run: |
+          curl -X POST \
+          -H "Content-Type: application/json" \
+          -H "x-api-key: ${{ secrets.TCLOUD_API_KEY }}" \
+          -H "x-user-email: ${{ secrets.TCLOUD_API_EMAIL }}" \
+          -d '{
+            "patches": [
+              {
+                "filename": "'"${{ env.PATCH_NAME }}"'",
+                "presigned_url": "'"${{ env.PRESIGN_PATCH_URL }}"'"
+              }
+            ],
+            "envs": ["CENGPR_DEV"],
+            "apply_oldprogram": "false",
+            "restartopt": "1"
+          }' \
+          "https://api-tcloud-middler.fluig.cloudtotvs.com.br/dev/tcloud-external-integration/customers/${{ secrets.TCLOUD_CUSTOMER }}/topologies/${{ secrets.TCLOUD_ENVIRONMENT_ID }}/action/protheus_apply_patch"
