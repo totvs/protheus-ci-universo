@@ -228,4 +228,4 @@ jobs:
             "apply_oldprogram": "false",
             "restartopt": "1"
           }' \
-          "https://api-tcloud-middler.fluig.cloudtotvs.com.br/dev/tcloud-external-integration/customers/${{ secrets.TCLOUD_CUSTOMER }}/topologies/${{ secrets.TCLOUD_ENVIRONMENT_ID }}/action/protheus_apply_patch"
+          "https://api-tcloud-middler.fluig.cloudtotvs.com.br/prod/tcloud-external-integration/customers/${{ secrets.TCLOUD_CUSTOMER }}/topologies/${{ secrets.TCLOUD_ENVIRONMENT_ID }}/action/protheus_apply_patch"
