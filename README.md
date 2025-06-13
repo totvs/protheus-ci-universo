@@ -1,6 +1,6 @@
 # protheus-ci-universo
 
-Repositório com o exemplo de CI/CD apresentado na palestra code no code: **Linha Protheus - Jornada CI/CD Protheus** no Universo TOTVS 2024.
+Repositório com o exemplo de CI/CD apresentado na palestra code no code: **Modernize o ambiente de desenvolvimento de customização na Linha Protheus usando CI/CD na TOTVS CLOUD** no Universo TOTVS 2025.
 
 Para baixá-lo, faça um clone deste repositório em seu ambiente local: `git clone https://github.com/totvs/protheus-ci-universo`.
 
@@ -12,31 +12,36 @@ Se deseja subir o ambiente Protheus via Docker deste exemplo veja o tópico [Amb
 
 ## Pipeline (etapas)
 
-Esta pipeline de exemplo consiste em 4 etapas (veja aba Actions deste repositório):
+Esta pipeline de exemplo consiste em 5 etapas (veja aba Actions deste repositório):
 
 ```
 on push
   ├── 1. Code Analysis (inspeção - CI) -> Realiza a execução da análise de qualidade de código;
   ├── 2. Build (construção - CI) -> Compila os fontes e gera o RPO Custom;
   ├── 3. TIR (teste - CD*/CI) -> Baixa o RPO custom e realiza os testes usando o TIR sem interface;
-  └── 4. Patch Gen (artefato final - CD) -> Gera um patch com os fontes Protheus do repositório.
+  ├── 4. Patch Generation (artefato final - CD) -> Gera um patch com os fontes Protheus do repositório.
+  └── 5. Apply Patch on T-Cloud (deployment - CD) -> Aplica o patch gerado no ambiente de Dev do TOTVS Cloud
 ```
 
 Esta pipeline foi configurada para executar sequencialmente, cada uma das etapas depende que a anterior tenha sido executada com sucesso para continuar.
 
 A definição está no arquivo `.github/workflows/pipeline.yml`, onde cada etapa é um job do GitHub Actions que executa alguns scripts para realizar a tarefa da etapa em questão.
 
-\* Como explicamos na apresentação, o TIR depende de um ambiente Protheus em execução para funcionar, logo precisamos subir um ambiente de teste com o RPO atualizado, neste ponto fazemos uma espécie de CD para subir um ambiente local em Docker.
+\* Como explicado na apresentação, o TIR depende de um ambiente Protheus em execução para funcionar, logo precisamos subir um ambiente de teste com o RPO atualizado, neste ponto precisamos fazer uma espécie de CD para subir um ambiente local em Docker.
 
-### Solução para execução do TIR em ambiente local
+\* Em sua pipeline você pode apontar o TIR para algum ambiente funcional e acessível via Github pela internet, ou com runners em servidores locais ([veja mais aqui](#soluções-para-execução-do-tir-em-ambiente-local)) ao invés de usar via Docker na pipeline. Nesses casos você pode precisar fazer a etapa da aplicação do patch antes.
+
+### Soluções para execução do TIR em ambiente local
 
 Conforme explicado no tópico [Ambiente Protheus com Docker](#ambiente-protheus-com-docker), para subir o ambiente com essas imagens Docker de desenvolvimento e base iniciada, é necessário passar como volume os RPOs, includes, dicionários e INIs.
 
-Como alguns artefatos são privados e não podemos disponibilizar publicamente (como RPO e dicionários), deixamos esses arquivos num servidor privado e na pipeline apenas fazemos o download deles na hora de subir a base Protheus.
+Como alguns artefatos são privados e não podemos disponibilizar publicamente (como RPO e dicionários), deixamos esses arquivos num servidor privado (em nosso caso usamos um bucket na AWS com acesso via URL pré assinada) e na pipeline apenas fazemos o download deles na hora de subir a base Protheus.
 
-Você pode seguir o mesmo conceito (usando um servidor HTTP ou repositório privado) para baixar os artefatos na pipeline ou criar uma imagem customizada já contendo os artefatos embarcados, veja o tópico: [Herdando imagem base](#herdando-imagem-base).
+Para baixar os artefatos na pipeline você pode seguir o mesmo conceito, utilizar um servidor HTTP próprio, criar um repositório privado no Github (ou outro SCV online), ou ainda criar uma imagem customizada (de preferência privada) já contendo os artefatos embarcados, veja o tópico: [Herdando imagem base](#herdando-imagem-base).
 
-Uma outra solução seria executar um agent on promise (hospedado em sua infraestrutura) dos runners do GitHub ([veja aqui a documentação sobre isso](https://docs.github.com/pt/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners)) conectado a uma instância Docker para execução dos jobs da pipeline. Dessa forma os artefatos ainda estariam seguros e poderiam ser passados por volume para o runner e container protheus.
+Uma outra solução seria executar um agent on promise (hospedado em sua infraestrutura) dos runners do GitHub ([veja aqui a documentação sobre isso](https://docs.github.com/pt/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners)) conectado a uma instância Docker para a execução dos jobs da pipeline. Dessa forma os artefatos ainda estariam seguros e poderiam ser passados por volume para o runner e container Protheus.
+
+Com runners locais também seria possível acessar ambientes Protheus rodando em sua infraestrutura de rede própria, ao invés de utilizar um ambiente em Docker.
 
 ### Tratamento de falhas nos testes do TIR
 
@@ -53,9 +58,9 @@ if len(result.errors) > 0 or len(result.failures) > 0:
 
 ### Visão aba Actions
 
-Na imagem* abaixo é possível ver uma execução com sucesso da pipeline, onde foram executadas as 4 etapas e gerado os artefatos (custom rpo e patch) para aplicação no ambiente.
+Na imagem* abaixo é possível ver uma execução com sucesso da pipeline, onde foram executadas as 5 etapas, gerado os artefatos (custom rpo e patch) e aplicado no ambiente TOTVS Cloud.
 
-![image](https://github.com/totvs/protheus-ci-universo/assets/10109480/92e4c354-76b1-4432-982f-2fc44bf75aea)
+![image](https://github.com/user-attachments/assets/843716d4-de56-435f-875c-dc98361cc042)
 
 \* Imagem anexada pois a retenção máxima do GitHub Actions é de 90 dias.
 
@@ -63,7 +68,7 @@ Na imagem* abaixo é possível ver uma execução com sucesso da pipeline, onde 
 
 As imagens Docker de desenvolvimento que fornecemos contém apenas os arquivos binários (ex.: AppServer e DBAccess), portanto os outros artefatos como RPO, dicionário e INI devem ser passados por volume.
 
-Se deseja subir o ambiente Protheus via Docker deste exemplo (que usamos para executar os testes do TIR), siga os seguintes passos:
+Se deseja subir localmente o ambiente Protheus via Docker deste exemplo (que usamos para executar os testes do TIR), siga os seguintes passos:
 
 1. Baixe os seguintes artefatos: **includes** (apenas para compilações), **rpo** default e o **dicionário**;
 2. Adicione na [pasta protheus](#estrutura-de-pastas) os artefatos baixados em suas respectivas subpastas (essas subpastas são volumes no compose que sobe o ambiente: `./ci/docker/docker-compose.yml`);
@@ -76,9 +81,9 @@ O banco de dados é uma imagem PostgreSQL já com a estrutura de dicionário ini
 
 ### Herdando imagem base
 
-Caso deseje você também pode criar uma nova imagem (Dockerfile) adicionando os artefatos (RPO e/ou dicionário) e herdando (FROM) as nossas imagens como base para não precisar volumar os arquivos.
+Também é possivel criar uma nova imagem (Dockerfile) adicionando os artefatos (RPO e/ou dicionário) e herdando (FROM) as nossas imagens como base para não precisar volumar os arquivos, [veja aqui como criar um Dockerfile](https://docs.docker.com/get-started/docker-concepts/building-images/writing-a-dockerfile).
 
-Porém não recomendados essa prática para o `custom.rpo` por exemplo, pois dessa forma cada vez que o container for encerrado, tudo que foi compilado será perdido.
+Porém não recomendados essa prática para o `custom.rpo` por exemplo, pois dessa forma cada vez que o container for encerrado, tudo que foi compilado será perdido se não estiver em um volume.
 
 ## Scripts extras
 
