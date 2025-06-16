@@ -9,5 +9,6 @@
     "TimeOut": 90,
     "Headless": true,
     "ScreenshotFolder": "/tmp/Log",
-    "LogFolder": "/tmp/Log"
+    "LogFolder": "/tmp/Log",
+    "LogInfoConfig": true
 }
