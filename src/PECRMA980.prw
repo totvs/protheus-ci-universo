@@ -9,7 +9,7 @@ User Function CRMA980()
     Local cIDModel      := ''
     Local oObj          := NIL
 
-    SX3->X3_CAMPO := ""
+    // SX3->X3_CAMPO := ""
 
     If aParam <> NIL
         oObj        := aParam[1]
